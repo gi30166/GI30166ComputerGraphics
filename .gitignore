@@ -1,0 +1,33 @@
+# Ignore the .vs folder (Visual Studio settings)
+.vs/
+
+# Ignore the bin and obj folders (build output)
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Ignore Visual Studio for Mac-specific files
+.vscode/
+
+# Ignore ASP.NET Core user secrets (optional, if you're working on ASP.NET projects)
+secrets.json
+
+# Ignore Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Ignore npm package dependencies (optional, for Node.js)
+node_modules/
+
+# Ignore Rider and other JetBrains IDE specific files (optional)
+.idea/
+
+# Ignore Thumbnails and Mac system files (if on macOS)
+.DS_Store
