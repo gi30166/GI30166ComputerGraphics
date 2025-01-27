@@ -1,0 +1,18 @@
+{
+  "name": "gi30166computergraphics",
+  "version": "1.0.0",
+  "description": "<h1>Gzim Ismaili & Tringa Shatmani </h1>\r <h2>CCS-601-2024</h1>",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "three": "^0.168.0",
+    "vite": "^5.4.14"
+  }
+}

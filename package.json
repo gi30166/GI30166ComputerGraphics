@@ -1,0 +1,12 @@
+{
+  "name": "gi30166computergraphics",
+  "version": "1.0.0",
+  "description": "<h1>Grafika kompjuterike</h1>\r <h2>CCS-601-2024</h1>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
