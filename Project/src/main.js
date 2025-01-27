@@ -57,76 +57,77 @@ function animateBubbles() {
     });
 }
 // Rotate the fish to face the right way initially (adjust the rotation if necessary)
-function loadFish(objPath, mtlPath, initialPosition, radius, speed) {
+function loadFish(objPath, mtlPath, initialPosition, radius, speed, initialRotationX, initialRotationZ) {
     const mtlLoader = new MTLLoader();
     mtlLoader.load(
-      mtlPath,
-      (materials) => {
-        materials.preload();
-        const objLoader = new OBJLoader();
-        objLoader.setMaterials(materials);
-        objLoader.load(
-          objPath,
-          (object) => {
-            object.position.set(initialPosition.x, initialPosition.y, initialPosition.z);
-            object.scale.set(0.2, 0.2, 0.2); // Make fish smaller
-  
-            // Adjust the initial rotation to make sure fish faces the correct direction
-            // This part ensures the fish is properly oriented along the Y axis (it depends on your model)
-            object.rotation.y = Math.PI / 2; // Or adjust this depending on the model orientation
-  
-            scene.add(object);
-  
-            // Store fish and animation details
-            fishes.push(object);
-            fishAnimations.push({ radius, speed, angle: Math.random() * Math.PI * 2 });
-          },
-          undefined,
-          (error) => console.error('Error loading OBJ file:', error)
-        );
-      },
-      undefined,
-      (error) => console.error('Error loading MTL file:', error)
+        mtlPath,
+        (materials) => {
+            materials.preload();
+            const objLoader = new OBJLoader();
+            objLoader.setMaterials(materials);
+            objLoader.load(
+                objPath,
+                (object) => {
+                    object.position.set(initialPosition.x, initialPosition.y, initialPosition.z);
+                    object.scale.set(0.2, 0.2, 0.2); // Scale down the fish
+
+                    // Set fixed X and Z rotations only once when the fish is loaded
+                    object.rotation.x = initialRotationX;  // Set X rotation
+                    object.rotation.z = initialRotationZ;  // Set Z rotation
+
+                    scene.add(object);
+
+                    // Store fish and animation details
+                    fishes.push(object);
+                    fishAnimations.push({
+                        radius,
+                        speed,
+                        angle: Math.random() * Math.PI * 2,
+                        initialRotationX,
+                        initialRotationZ
+                    });
+                },
+                undefined,
+                (error) => console.error('Error loading OBJ file:', error)
+            );
+        },
+        undefined,
+        (error) => console.error('Error loading MTL file:', error)
     );
-  }  
-// Add multiple fish to the scene
+}
 loadFish('/textures/fish1/13003_Auriga_Butterflyfish_v1_L3.obj', '/textures/fish1/13003_Auriga_Butterflyfish_v1_L3.mtl', { x: 10, y: 5, z: 0 }, 10, 0.03);
 loadFish('/textures/fish2/13006_Blue_Tang_v1_l3.obj', '/textures/fish2/13006_Blue_Tang_v1_l3.mtl', { x: 5, y: 4, z: 5}, 5, 0.01);
 loadFish('/textures/fish3/13008_Clown_Goby_Citrinis_v1_l3.obj', '/textures/fish3/13008_Clown_Goby_Citrinis_v1_l3.mtl', { x: -5, y: 2, z: -5 }, 4, 0.02);
 loadFish('/textures/fish4/13009_Coral_Beauty_Angelfish_v1_l3.obj', '/textures/fish4/13009_Coral_Beauty_Angelfish_v1_l3.mtl', { x: -5, y: 2, z: -5 }, 7, 0.022);
-loadFish('/textures/fish5/12265_Fish_v1_L2.obj', '/textures/fish5/12265_Fish_v1_L2.mtl', { x: -5, y: 1, z: -5 }, 5, 0.01);
+loadFish('/textures/fish5/12265_Fish_v1_L2.obj', '/textures/fish5/12265_Fish_v1_L2.mtl', { x: -5, y: 1, z: -5 }, 5, 0.01, 2, Math.PI /2);
 loadFish('/textures/fish6/12993_Long_Fin_White_Cloud_v1_l3.obj', '/textures/fish6/12993_Long_Fin_White_Cloud_v1_l3.mtl', { x: -5, y: 1, z: -5 }, 6, 0.015);
 loadFish('/textures/fish7/13013_Red_Head_Solon_Fairy_Wrasse_v1_l3.obj', '/textures/fish7/13013_Red_Head_Solon_Fairy_Wrasse_v1_l3.mtl', { x: 0, y: 2, z: -5 }, 3, 0.01);
 loadFish('/textures/fish8/13014_Six_Line_Wrasse_v1_l3.obj', '/textures/fish8/13014_Six_Line_Wrasse_v1_l3.mtl', { x: -5, y: 3, z: -5 }, 13, 0.04);
-
-
-// Animate fish in circular paths
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
     animateBubbles();
     renderer.render(scene, camera);
-  
+
     // Move fish in circular paths
     fishes.forEach((fish, index) => {
-      const animation = fishAnimations[index];
-      animation.angle += animation.speed; // Update angle for circular motion
-  
-      fish.position.x = animation.radius * Math.cos(animation.angle);
-      fish.position.z = animation.radius * Math.sin(animation.angle);
-  
-      // Ensure fish faces forward in the direction of motion
-      // Fish must rotate along the Y axis based on its path
-      fish.rotation.y = -animation.angle;  // Rotate fish to face forward in the swimming direction
-  
-      // If rotation goes below 0, make sure we wrap it to a positive value
-      if (fish.rotation.y < 0) fish.rotation.y += Math.PI * 2;
-  
+        const animation = fishAnimations[index];
+        animation.angle += animation.speed; // Update angle for circular motion
+
+        fish.position.x = animation.radius * Math.cos(animation.angle);
+        fish.position.z = animation.radius * Math.sin(animation.angle);
+
+        // Only update Y rotation (circular swimming effect)
+        fish.rotation.x = -animation.angle;  // Rotate fish to face forward in the swimming direction
+
+        // Keep fixed X and Z rotations
+        fish.rotation.y = animation.initialRotationX;  // Fixed X rotation
+        fish.rotation.z = animation.initialRotationZ;  // Fixed Z rotation
     });
-  
+
     controls.update();
     renderer.render(scene, camera);
-  }
+}
 animate();
 
 // Handle window resize
