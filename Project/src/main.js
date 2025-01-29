@@ -9,7 +9,7 @@ import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
 // Scene, Camera, Renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 10, 25);
+camera.position.set(17, 20, 70);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -42,6 +42,7 @@ const sandMaterial = new THREE.MeshStandardMaterial({
 const sandGeometry = new THREE.PlaneGeometry(30, 30, 30, 30);
 const sandMesh = new THREE.Mesh(sandGeometry, sandMaterial);
 sandMesh.rotation.x = -Math.PI / 2;
+sandMesh.position.y=0.01;
 scene.add(sandMesh);
 
 // Aquarium Walls
@@ -61,10 +62,17 @@ scene.add(walls);
 
 // Aquarium Cover
 const coverMaterial = new THREE.MeshStandardMaterial({ color: 0x444444 });
-const coverGeometry = new THREE.BoxGeometry(31, 1, 31);
+const coverGeometry = new THREE.BoxGeometry(33.5, 1, 33.5);
 const cover = new THREE.Mesh(coverGeometry, coverMaterial);
 cover.position.y = 15.5;
 scene.add(cover);
+
+//Pjesa Posht
+const coverMaterial2 = new THREE.MeshStandardMaterial({ color: 0x444444 });
+const coverGeometry2 = new THREE.BoxGeometry(31, 1, 31);
+const cover2 = new THREE.Mesh(coverGeometry2, coverMaterial2);
+cover2.position.y = -.5;
+scene.add(cover2);
 
 // Water Surface
 const waterGeometry = new THREE.PlaneGeometry(30, 30);
@@ -119,8 +127,8 @@ tableLoader.load('/textures/table/table.mtl', (materials) => {
     const objLoader = new OBJLoader();
     objLoader.setMaterials(materials);
     objLoader.load('/textures/table/table.obj', (table) => {
-        table.position.set(0, -17, 0);
-        table.scale.set(35, 35, 35);
+        table.position.set(0, -20.1, 0);
+        table.scale.set(40, 40, 40);
         
         // Adjust lighting and material if needed
         table.traverse((child) => {
